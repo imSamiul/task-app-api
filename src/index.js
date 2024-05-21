@@ -7,6 +7,9 @@ require('./db/mongoose');
 
 const app = express();
 const port = process.env.PORT;
+app.get('/', (req, res) => {
+  res.send('app is running');
+});
 
 const upload = multer({
   dest: 'images', // dest => destination
