@@ -1,6 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const sharp = require('sharp');
+const mkdirp = require('mkdirp');
 const User = require('../model/user');
 const auth = require('../middleware/auth');
 const { sendMail, sendCancellationMail } = require('../emails/account');
@@ -163,8 +164,10 @@ router.post('/users/logoutAll', auth, async (req, res) => {
     res.status(500).send();
   }
 });
+
+const storage = multer.memoryStorage();
 const avatar = multer({
-  storage: multer.memoryStorage(),
+  storage,
   limits: {
     fileSize: 1000000,
   },
@@ -184,6 +187,7 @@ router.post(
   auth,
   avatar.single('avatar'),
   async (req, res) => {
+    console.log('Uploaded file:', req.file.buffer);
     const buffer = await sharp(req.file.buffer)
       .resize({ width: 250, height: 250 })
       .png()
