@@ -164,6 +164,7 @@ router.post('/users/logoutAll', auth, async (req, res) => {
   }
 });
 const avatar = multer({
+  storage: multer.memoryStorage(),
   limits: {
     fileSize: 1000000,
   },
